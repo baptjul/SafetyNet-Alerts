@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @RestController
 public class PersonsController {
@@ -13,14 +14,14 @@ public class PersonsController {
     @Autowired
     PersonsService personsService;
 
-    @GetMapping(path = "/person")
+    @GetMapping(path = "person")
     public ArrayList<Persons> getAllPersons() {
         return personsService.getAllPersons();
     }
 
-    @GetMapping(path = "/personInfo?firstName=<{firstName}&lastName=<{lastName}>")
-    public Persons getOnePerson(@PathVariable String firstName, @PathVariable String lastName) {
-        return personsService.getOnePerson(firstName, lastName);
+    @GetMapping(path = "person?firstName=<{firstName}&lastName=<{lastName}>")
+    public ArrayList<Persons> getOnePerson(@PathVariable String firstName, @PathVariable String lastName) {
+        return personsService.getPersonFromName(firstName, lastName);
     }
 
     @GetMapping(path = "communityEmail?city=<{city}>")
@@ -29,16 +30,26 @@ public class PersonsController {
     }
 
     @GetMapping(path = "childAlert?address=<{address}>")
-    public ArrayList<Persons> getChildList(@PathVariable String address) {
-        return personsService.getChildList(address);
+    public Map<String, Object> childAlert(@PathVariable String address) {
+        return personsService.childAlert(address);
     }
 
-    @PostMapping(path = "/person")
+    @GetMapping(path = "fire?address=<{address}>")
+    public ArrayList<Map> fireAddress(@PathVariable String address) {
+        return personsService.fireAddress(address);
+    }
+
+    @GetMapping(path = "personInfo?firstName=<{firstName}&lastName=<{lastName}>")
+    public ArrayList<Persons> getPersonInfo(@PathVariable String firstName, @PathVariable String lastName) {
+        return personsService.getPersonFromName(firstName, lastName);
+    }
+
+    @PostMapping(path = "person")
     public Persons addOnePerson(@RequestBody Persons person){
         return personsService.addOnePerson(person);
     }
 
-    @PutMapping(path = "/person?{address}")
+    @PutMapping(path = "person?{address}")
     public Persons updateOnePerson (@RequestBody Persons person, @RequestBody String firstName, @RequestBody String LastName){
         return personsService.updateOnePerson(person, firstName, LastName);
     }

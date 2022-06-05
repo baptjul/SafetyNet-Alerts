@@ -9,20 +9,25 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "firestation")
+//@RequestMapping(path = "firestation")
 public class FireStationsController {
 
     @Autowired
     FireStationService firestationService;
 
-    @GetMapping(path = "/firestation?stationNumber=<{stationNumber}r>")
+    @GetMapping(path = "firestation?stationNumber=<{stationNumber}r>")
     public Map<String, Object> coveredPersons(@PathVariable String stationNumber) {
         return firestationService.coverage(stationNumber);
     }
 
-    @GetMapping(path = "/phoneAlert?firestation=<{stationNumber}>")
-    public ArrayList<String> phoneAlert(@PathVariable String stationNumber, String phoneAlert) {
+    @GetMapping(path = "phoneAlert?firestation=<{stationNumber}>")
+    public ArrayList<String> phoneAlert(@PathVariable String stationNumber) {
         return firestationService.phoneAlert(stationNumber);
+    }
+
+    @GetMapping(path = "flood/stations?stations=<{station_numbers}>")
+    public ArrayList<Map> floodAlert(@PathVariable ArrayList<Integer> stationNumber) {
+        return firestationService.floodAlert(stationNumber);
     }
 
     @GetMapping(path = "firestation")
@@ -30,9 +35,14 @@ public class FireStationsController {
         return firestationService.getFireStation();
     }
 
-    @GetMapping(path = "?stationNumber=<{stationNumber}>")
-    public FireStations getOneFireStation(@PathVariable String stationNumber){
-        return firestationService.getOneFireStation(stationNumber);
+    @GetMapping(path = "firestation/?stationNumber=<{stationNumber}>")
+    public FireStations getOneFireStationWithNumber(@PathVariable String stationNumber){
+        return firestationService.getOneFireStationWithNumber(stationNumber);
+    }
+
+    @GetMapping(path = "firestation/?address=<{address}>")
+    public FireStations getOneFireStationWithAddress(@PathVariable String address){
+        return firestationService.getOneFireStationWithAddress(address);
     }
 
     @PostMapping(path = "firestation")
@@ -40,12 +50,12 @@ public class FireStationsController {
         return firestationService.addFireStation(fireStation);
     }
 
-    @PutMapping(path = "/firestation?{address}")
+    @PutMapping(path = "firestation?{address}")
     public FireStations updateFireStationNumber (@RequestBody FireStations fireStation, @PathVariable String address){
         return firestationService.updateFireStationNumber(fireStation, address);
     }
 
-    @DeleteMapping(path = "/firestation?{address}")
+    @DeleteMapping(path = "firestation?{address}")
     public ArrayList<FireStations> deleteFireStation(FireStations fireStation){
         return firestationService.deleteFireStation(fireStation);
     }

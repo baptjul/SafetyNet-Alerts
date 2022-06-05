@@ -1,17 +1,20 @@
 package com.SafetyNet.SafetyNet.Alerts.dao;
 
 import com.SafetyNet.SafetyNet.Alerts.models.FireStations;
-import com.SafetyNet.SafetyNet.Alerts.models.Persons;
 
 import java.util.ArrayList;
 
 public class FireStationsDAO {
 
-    public FireStations getOneFireStation(String stationNumber) {
+    public ArrayList<FireStations> getFireStation() {
         return null;
     }
 
-    public ArrayList<FireStations> getFireStation() {
+    public FireStations getOneFireStationWithNumber(String stationNumber) {
+        return null;
+    }
+
+    public FireStations getOneFireStationWithAddress(String address) {
         return null;
     }
 
@@ -24,10 +27,6 @@ public class FireStationsDAO {
     }
 
     public ArrayList<FireStations> deleteFireStation(FireStations fireStation) {
-        return null;
-    }
-
-    public ArrayList<Persons> coveredPersons(String fireStationAddress) {
         return null;
     }
 }

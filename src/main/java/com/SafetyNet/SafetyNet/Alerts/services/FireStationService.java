@@ -1,6 +1,7 @@
 package com.SafetyNet.SafetyNet.Alerts.services;
 
 
+import com.SafetyNet.SafetyNet.Alerts.models.MedicalRecords;
 import com.SafetyNet.SafetyNet.Alerts.models.Persons;
 import com.SafetyNet.SafetyNet.Alerts.models.FireStations;
 import com.SafetyNet.SafetyNet.Alerts.dao.FireStationsDAO;
@@ -16,13 +17,19 @@ public class FireStationService {
     private static FireStationsDAO fireStationsDAO;
     private static PersonsDAO personsDAO;
     private static MedicalRecordsDAO medicalRecordsDAO;
+    private static MedicalRecordService medicalRecordService;
+    private static PersonsService personsService;
 
     public ArrayList<FireStations> getFireStation() {
         return fireStationsDAO.getFireStation();
     }
 
-    public FireStations getOneFireStation(String stationNumber) {
-        return fireStationsDAO.getOneFireStation(stationNumber);
+    public FireStations getOneFireStationWithNumber(String stationNumber) {
+        return fireStationsDAO.getOneFireStationWithNumber(stationNumber);
+    }
+
+    public FireStations getOneFireStationWithAddress(String address) {
+        return fireStationsDAO.getOneFireStationWithAddress(address);
     }
 
     public ArrayList<FireStations> addFireStation(FireStations fireStation) {
@@ -37,28 +44,15 @@ public class FireStationService {
         return fireStationsDAO.deleteFireStation(fireStation);
     }
 
-    public static ArrayList<Persons> coveredPersons(String stationNumber) {
-        FireStations fireStation = fireStationsDAO.getOneFireStation(stationNumber);
-        String fireStationAddress = fireStation.getStationAddress();
-        return fireStationsDAO.coveredPersons(fireStationAddress);
-    }
-
     public Map<String, Object> coverage(String stationNumber) {
-        ArrayList<Persons> coveredPersons = FireStationService.coveredPersons(stationNumber);
-        Date date = new Date();
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        int currentYear = calendar.get(Calendar.YEAR);
+        ArrayList<Persons> coveredPersons = personsService.coveredPersons(stationNumber);
         int over18 = 0;
         int under18 = 0;
-        for (int i = 0; i < coveredPersons.size(); i++) {
-            String firstName = coveredPersons.get(i).getFirstName();
-            String lastName = coveredPersons.get(i).getLastName();
-            String mediaclRecord = medicalRecordsDAO.getPersonMedicalRecord(firstName, lastName);
-            String birthDate = mediaclRecord.getBirthdate();
-            String birthYear = birthDate.substring(birthDate.lastIndexOf("/") + 1);
-            int age = currentYear - birthYear
-            if (age > 18) {
+        for (Persons coveredPerson : coveredPersons) {
+            String firstName = coveredPerson.getFirstName();
+            String lastName = coveredPerson.getLastName();
+            int personAge = medicalRecordService.findPersonsAge(firstName, lastName);
+            if (personAge > 18) {
                 over18++;
             } else {
                 under18++;
@@ -73,11 +67,36 @@ public class FireStationService {
     }
 
     public ArrayList<String> phoneAlert(String stationNumber) {
-        ArrayList<Persons> coveredPersons = FireStationService.coveredPersons(stationNumber);
+        ArrayList<Persons> coveredPersons = personsService.coveredPersons(stationNumber);
         ArrayList<String> personsPhone = new ArrayList<>();
-        for (int i = 0; i < coveredPersons.size(); i++) {
-            personsPhone.add(coveredPersons.get(i).getPhone());
+        for (Persons coveredPerson : coveredPersons) {
+            personsPhone.add(coveredPerson.getPhone());
         }
         return personsPhone;
+    }
+
+    public ArrayList<Map> floodAlert(ArrayList<Integer> stationNumber) {
+        ArrayList<Map> personsIntel = new ArrayList<>();
+        for (Integer station : stationNumber) {
+            FireStations fireStation = this.getOneFireStationWithNumber(station.toString());
+            String address = fireStation.getStationAddress();
+            ArrayList<Persons> coveredPersons = personsService.coveredPersons(station.toString());
+            Map<String, Object> inhabitant = new HashMap<>();
+            for (Persons persons : coveredPersons) {
+                String firstName = persons.getFirstName();
+                String lastName = persons.getLastName();
+                String phone = persons.getPhone();
+                int personAge = medicalRecordService.findPersonsAge(firstName, lastName);
+                MedicalRecords antecedent = medicalRecordService.getPersonAntecedent(firstName, lastName);
+                inhabitant.put("name", lastName);
+                inhabitant.put("phone", phone);
+                inhabitant.put("age", personAge);
+                inhabitant.put("antecedent", antecedent);
+                personsIntel.add(inhabitant);
+                inhabitant.clear();
+            }
+        }
+
+        return personsIntel;
     }
 }

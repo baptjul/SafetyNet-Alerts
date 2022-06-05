@@ -9,7 +9,7 @@ public class PersonsDAO {
         return null;
     }
 
-    public Persons getOnePerson(String firstName, String lastName) {
+    public ArrayList<Persons> getOnePerson(String firstName, String lastName) {
         return null;
     }
 
@@ -22,6 +22,15 @@ public class PersonsDAO {
     }
 
     public Persons updateOnePerson(Persons person, String firstName, String LastName) {
+        return null;
+    }
+
+    public ArrayList<Persons> getAllPersonsForAddress(String address) {
+        // open connexion
+        // run sql
+        // close connexion
+        // return response
+        // catch error
         return null;
     }
 }
