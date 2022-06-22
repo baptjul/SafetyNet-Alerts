@@ -35,7 +35,7 @@ public class MedicalRecordsController {
     }
 
     @DeleteMapping(path = "medicalRecord?firstName=<{firstName}>&lastName=<{lastName}>")
-    public ArrayList<MedicalRecords> deleteMedicalRecord(@PathVariable String firstName, @PathVariable String lastName){
+    public MedicalRecords deleteMedicalRecord(@PathVariable String firstName, @PathVariable String lastName){
         return medicalRecordService.deleteMedicalRecord(firstName, lastName);
     }
 }

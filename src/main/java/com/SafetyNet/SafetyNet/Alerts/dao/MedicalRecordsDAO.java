@@ -23,7 +23,7 @@ public class MedicalRecordsDAO {
         return null;
     }
 
-    public ArrayList<MedicalRecords> deleteMedicalRecord(String firstName, String lastName) {
+    public MedicalRecords deleteMedicalRecord(String firstName, String lastName) {
         return null;
     }
 

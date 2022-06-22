@@ -54,7 +54,7 @@ public class PersonsController {
         return personsService.updateOnePerson(person, firstName, LastName);
     }
 
-    @DeleteMapping(path = "/person")
+    @DeleteMapping(path = "person")
     public Persons deleteOnePersons(@RequestBody String firstName, @RequestBody String LastName){
         return personsService.deleteOnePersons(firstName, LastName);
     }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
-//@RequestMapping(path = "firestation")
 public class FireStationsController {
 
     @Autowired
@@ -56,7 +55,7 @@ public class FireStationsController {
     }
 
     @DeleteMapping(path = "firestation?{address}")
-    public ArrayList<FireStations> deleteFireStation(FireStations fireStation){
+    public FireStations deleteFireStation(FireStations fireStation){
         return firestationService.deleteFireStation(fireStation);
     }
 }

@@ -26,7 +26,7 @@ public class FireStationsDAO {
         return null;
     }
 
-    public ArrayList<FireStations> deleteFireStation(FireStations fireStation) {
+    public FireStations deleteFireStation(FireStations fireStation) {
         return null;
     }
 }
